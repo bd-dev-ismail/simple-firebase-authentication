@@ -1,6 +1,6 @@
 
 import './App.css';
-import {getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/auth';
+import {FacebookAuthProvider, getAuth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/auth';
 import app from './firebase/firebase.init'
 import { useState } from 'react';
 const auth = getAuth(app);
@@ -8,6 +8,7 @@ const auth = getAuth(app);
 function App() {
   const [user, setUser] = useState({});
  const googleProvider = new GoogleAuthProvider();
+ const facebookProvider = new FacebookAuthProvider();
   const githubProvider = new GithubAuthProvider();
   const handalSignIn = () =>{
     signInWithPopup(auth, googleProvider)
@@ -30,6 +31,17 @@ function App() {
       setUser({});
     })
   };
+  const handalFacebookSignIn = ()=>{
+    signInWithPopup(auth, facebookProvider)
+    .then(result =>{
+      const user = result.user;
+      setUser(user);
+      console.log(user);
+    })
+    .then(error =>{
+      console.error(error);
+    })
+  }
   const handalGithubSignIn = ()=>{
     signInWithPopup(auth, githubProvider)
     .then(result=>{
@@ -50,6 +62,9 @@ function App() {
       ) : (
         <>
           <button onClick={handalSignIn}>Sign In With Google</button>
+          <button onClick={handalFacebookSignIn} type="submit">
+            Sign In With Facebook
+          </button>
           <button onClick={handalGithubSignIn}>Sign in with Github</button>
         </>
       )}
